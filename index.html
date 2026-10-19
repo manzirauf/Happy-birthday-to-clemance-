@@ -1,0 +1,251 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Happy Birthday Surprise</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,800&family=Caveat:wght@500;700&display=swap">
+<style>
+/* Layout: one centered card-less stage, three steps (gift, message, question), dark rose-night single look */
+:root {
+  --night: #1c1226;
+  --night-2: #2a1a38;
+  --blush: #ffd9e0;
+  --rose: #ff5c8a;
+  --gold: #ffc857;
+  --mute: #b9a6c9;
+  --font-display: "Bricolage Grotesque", "Segoe UI", system-ui, sans-serif;
+  --font-hand: "Caveat", "Segoe Script", cursive;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+html, body { height: 100%; }
+body {
+  margin: 0;
+  background: radial-gradient(120% 90% at 50% 0%, var(--night-2) 0%, var(--night) 65%);
+  color: var(--blush);
+  font-family: var(--font-display);
+  padding-inline: 20px;
+  padding-block: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow-x: hidden;
+}
+#confetti { position: fixed; inset: 0; width: 100%; height: 100%; pointer-events: none; z-index: 5; }
+.stage { width: 100%; max-width: 480px; text-align: center; position: relative; z-index: 2; }
+.step { display: flex; flex-direction: column; align-items: center; gap: 18px; animation: rise .7s ease both; }
+.eyebrow { font-size: .8rem; letter-spacing: .22em; text-transform: uppercase; color: var(--mute); margin: 0; }
+h1 { font-size: clamp(2.4rem, 11vw, 3.8rem); line-height: 1.02; font-weight: 800; margin: 0; text-wrap: balance; letter-spacing: -.02em; }
+h1 em { font-style: normal; color: var(--rose); }
+h2 { font-size: clamp(1.8rem, 8vw, 2.6rem); line-height: 1.1; font-weight: 800; margin: 0; text-wrap: balance; letter-spacing: -.01em; }
+p { margin: 0; line-height: 1.6; font-size: 1.05rem; max-width: 34ch; text-wrap: pretty; }
+.hand { font-family: var(--font-hand); font-size: 1.7rem; color: var(--gold); line-height: 1.2; }
+.cake { width: 150px; height: auto; max-width: 100%; }
+.flame { transform-origin: 50% 100%; animation: flicker 1.1s ease-in-out infinite; }
+.out .flame { display: none; }
+.smoke { opacity: 0; }
+.out .smoke { animation: smoke 1.6s ease-out forwards; }
+button {
+  font: inherit; font-weight: 600; font-size: 1.05rem; cursor: pointer; border: 0;
+  border-radius: 999px; padding: 14px 28px; color: var(--night); background: var(--blush);
+  transition: transform .15s ease, background .15s ease;
+}
+button:hover { transform: translateY(-2px); }
+button:focus-visible { outline: 3px solid var(--gold); outline-offset: 3px; }
+button.yes { background: var(--rose); color: #fff; }
+button.ghost { background: transparent; color: var(--blush); border: 1.5px solid var(--mute); }
+.answers { position: relative; display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 14px; width: 100%; min-height: 150px; }
+.note { font-size: .95rem; color: var(--mute); min-height: 1.4em; }
+.reply { background: var(--night-2); border: 1px solid #4a3260; border-radius: 12px; padding: 14px 16px; font-size: .98rem; max-width: 100%; user-select: all; }
+.small { font-size: .85rem; color: var(--mute); }
+@keyframes rise { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
+@keyframes flicker { 0%,100% { transform: scale(1) rotate(-2deg); } 50% { transform: scale(1.08,.94) rotate(2deg); } }
+@keyframes smoke { 0% { opacity: .8; transform: translateY(0); } 100% { opacity: 0; transform: translateY(-26px); } }
+@media (prefers-reduced-motion: reduce) { .step, .flame, .out .smoke { animation: none; } }
+</style>
+
+<canvas id="confetti" aria-hidden="true"></canvas>
+
+<main class="stage">
+
+  <!-- Step 1: candle -->
+  <section class="step" id="s1">
+    <p class="eyebrow">Isabukuru nziza</p>
+    <h1>Happy Birthday, <em id="n1">you</em></h1>
+    <svg class="cake" id="cake" viewBox="0 0 150 130" role="img" aria-label="Birthday cake with one candle">
+      <g class="smoke" fill="none" stroke="#b9a6c9" stroke-width="3" stroke-linecap="round">
+        <path d="M75 30 q-8 -8 0 -16 q8 -8 0 -16"/>
+      </g>
+      <g class="flame">
+        <path d="M75 38 C66 28 70 20 75 10 C80 20 84 28 75 38Z" fill="#ffc857"/>
+        <path d="M75 36 C71 31 73 27 75 22 C77 27 79 31 75 36Z" fill="#ff5c8a"/>
+      </g>
+      <rect x="72" y="38" width="6" height="26" rx="2" fill="#ffd9e0"/>
+      <rect x="20" y="64" width="110" height="26" rx="6" fill="#ff5c8a"/>
+      <rect x="10" y="90" width="130" height="30" rx="6" fill="#ffd9e0"/>
+      <path d="M20 64 q10 14 20 0 q10 14 20 0 q10 14 20 0 q10 14 20 0 q10 14 20 0" fill="#ffd9e0"/>
+    </svg>
+    <p>Make a wish, then tap the candle.</p>
+    <button id="blow">Blow out the candle</button>
+  </section>
+
+  <!-- Step 2: wishes -->
+  <section class="step" id="s2" hidden>
+    <p class="eyebrow">Today is yours</p>
+    <h2>I hope this year is soft on you and generous.</h2>
+    <p>May you laugh more than you worry, finish what you start, and get every good thing you have been quietly working toward.</p>
+    <p>Thank you for being someone I can talk to. Meeting you made my days better.</p>
+    <p class="hand">There is one more thing I want to ask you...</p>
+    <button id="next">Continue</button>
+  </section>
+
+  <!-- Step 3: the question -->
+  <section class="step" id="s3" hidden>
+    <p class="eyebrow">From <span id="from">Rauf</span></p>
+    <h2>Will you be my girlfriend?</h2>
+    <p>I like how you think, how you laugh, and who I am around you.</p>
+    <div class="answers" id="answers">
+      <button class="yes" id="yes">Yes</button>
+      <button class="ghost" id="no">No</button>
+    </div>
+    <p class="note" id="note"></p>
+  </section>
+
+  <!-- Step 4: yes -->
+  <section class="step" id="s4" hidden>
+    <p class="eyebrow">She said yes</p>
+    <h1>Best birthday gift <em>ever</em></h1>
+    <p>You just made me really happy. Happy Birthday, and thank you.</p>
+    <p class="small">Send your answer to me:</p>
+    <div class="reply" id="reply">Yes! Happy birthday to me, and yes to you.</div>
+    <button id="copy" class="ghost">Copy message</button>
+  </section>
+
+</main>
+
+<script>
+(function () {
+  // Name comes from the link: add #TheirName to the end of the page address.
+  var raw = "";
+  try { raw = decodeURIComponent((location.hash || "").replace("#", "")).replace(/[^A-Za-zÀ-ɏ ._-]/g, "").slice(0, 24); } catch (e) {}
+  var name = raw || "Clemance";
+  document.getElementById("n1").textContent = name;
+
+  var $ = function (id) { return document.getElementById(id); };
+  function show(id) {
+    ["s1", "s2", "s3", "s4"].forEach(function (s) { $(s).hidden = (s !== id); });
+  }
+
+  // Confetti
+  var cv = $("confetti"), ctx = cv.getContext("2d"), bits = [], running = false;
+  function size() { cv.width = innerWidth; cv.height = innerHeight; }
+  size(); addEventListener("resize", size);
+  var cols = ["#ff5c8a", "#ffc857", "#ffd9e0", "#8ee3c8", "#9fb4ff"];
+  function burst(n) {
+    for (var i = 0; i < n; i++) {
+      bits.push({
+        x: Math.random() * cv.width, y: -20 - Math.random() * cv.height * .4,
+        vx: (Math.random() - .5) * 2, vy: 2 + Math.random() * 4,
+        s: 5 + Math.random() * 6, r: Math.random() * 6, vr: (Math.random() - .5) * .3,
+        c: cols[(Math.random() * cols.length) | 0]
+      });
+    }
+    if (!running) { running = true; tick(); }
+  }
+  function tick() {
+    ctx.clearRect(0, 0, cv.width, cv.height);
+    bits = bits.filter(function (b) { return b.y < cv.height + 20; });
+    bits.forEach(function (b) {
+      b.x += b.vx; b.y += b.vy; b.r += b.vr;
+      ctx.save(); ctx.translate(b.x, b.y); ctx.rotate(b.r);
+      ctx.fillStyle = b.c; ctx.fillRect(-b.s / 2, -b.s / 4, b.s, b.s / 2); ctx.restore();
+    });
+    if (bits.length) requestAnimationFrame(tick); else running = false;
+  }
+
+  $("blow").onclick = function () {
+    $("cake").classList.add("out");
+    this.disabled = true;
+    burst(120);
+    setTimeout(function () { show("s2"); }, 1500);
+  };
+  $("next").onclick = function () { show("s3"); };
+
+  // The question
+  var noMsgs = ["Are you sure?", "Think again...", "Please?", "Last chance!", "The No button is shy now."];
+  var noCount = 0, yesScale = 1;
+  var noBtn = $("no"), yesBtn = $("yes"), box = $("answers");
+  var lastMove = 0;
+  function dodge(e) {
+    if (e && e.preventDefault) e.preventDefault();
+    var now = Date.now();
+    if (now - lastMove < 150) return;
+    lastMove = now;
+    noCount++;
+    yesScale = Math.min(1 + noCount * .06, 1.6);
+    yesBtn.style.transform = "scale(" + yesScale + ")";
+    $("note").textContent = noMsgs[(noCount - 1) % noMsgs.length];
+    // Jump anywhere on the screen, away from the Yes button
+    var w = noBtn.offsetWidth, h = noBtn.offsetHeight;
+    var yr = yesBtn.getBoundingClientRect();
+    var x, y, tries = 0;
+    do {
+      x = 12 + Math.random() * Math.max(innerWidth - w - 24, 0);
+      y = 12 + Math.random() * Math.max(innerHeight - h - 24, 0);
+      tries++;
+    } while (tries < 20 && x < yr.right + 12 && x + w > yr.left - 12 && y < yr.bottom + 12 && y + h > yr.top - 12);
+    noBtn.style.position = "fixed";
+    noBtn.style.zIndex = "10";
+    noBtn.style.left = x + "px";
+    noBtn.style.top = y + "px";
+  }
+  // She can never land a click: it moves before the press, on touch, and on keyboard focus
+  ["pointerenter", "pointerdown", "touchstart", "mousedown", "click", "focus"].forEach(function (ev) {
+    noBtn.addEventListener(ev, dodge, { passive: false });
+  });
+
+  // Email alert via FormSubmit (no signup). Put your email below.
+  // First time only: FormSubmit sends you one activation email. Click it, then test by pressing Yes.
+  var MY_EMAIL = "manzirauf7@gmail.com";
+  function notifyYes() {
+    if (!MY_EMAIL || MY_EMAIL.indexOf("PASTE") === 0) return;
+    try {
+      fetch("https://formsubmit.co/ajax/" + encodeURIComponent(MY_EMAIL), {
+        method: "POST",
+        headers: { "Content-Type": "application/json", "Accept": "application/json" },
+        body: JSON.stringify({
+          _subject: "She said YES!",
+          name: name,
+          message: name + " clicked YES on your birthday page at " + new Date().toLocaleString() + "."
+        })
+      }).catch(function () {});
+    } catch (e) {}
+  }
+
+  yesBtn.onclick = function () {
+    notifyYes();
+    show("s4");
+    burst(220);
+    setTimeout(function () { burst(120); }, 900);
+  };
+
+  $("copy").onclick = function () {
+    var t = $("reply").textContent, btn = this;
+    function done() { btn.textContent = "Copied"; }
+    try {
+      navigator.clipboard.writeText(t).then(done, function () { sel(); });
+    } catch (e) { sel(); }
+    function sel() {
+      var r = document.createRange(); r.selectNodeContents($("reply"));
+      var s = getSelection(); s.removeAllRanges(); s.addRange(r);
+      btn.textContent = "Selected, now copy";
+    }
+  };
+})();
+</script>
+
+</body>
+</html>
+  
