@@ -103,7 +103,7 @@ button.ghost { background: transparent; color: var(--blush); border: 1.5px solid
 
   <!-- Step 3: the question -->
   <section class="step" id="s3" hidden>
-    <p class="eyebrow">From <span id="from">Rauf</span></p>
+    <p class="eyebrow">From <span id="from">Sudo</span></p>
     <h2>Will you be my girlfriend?</h2>
     <p>I like how you think, how you laugh, and who I am around you.</p>
     <div class="answers" id="answers">
@@ -206,19 +206,19 @@ button.ghost { background: transparent; color: var(--blush); border: 1.5px solid
     noBtn.addEventListener(ev, dodge, { passive: false });
   });
 
-  // Email alert via FormSubmit (no signup). Put your email below.
-  // First time only: FormSubmit sends you one activation email. Click it, then test by pressing Yes.
-  var MY_EMAIL = "manzirauf7@gmail.com";
+  // Email alert via Web3Forms. Goes to the email the key was created with.
+  var WEB3FORMS_KEY = "1e100c47-903e-4c4b-83a7-562807f6359b";
   function notifyYes() {
-    if (!MY_EMAIL || MY_EMAIL.indexOf("PASTE") === 0) return;
     try {
-      fetch("https://formsubmit.co/ajax/" + encodeURIComponent(MY_EMAIL), {
+      fetch("https://api.web3forms.com/submit", {
         method: "POST",
         headers: { "Content-Type": "application/json", "Accept": "application/json" },
         body: JSON.stringify({
-          _subject: "She said YES!",
+          access_key: WEB3FORMS_KEY,
+          subject: "She said YES!",
+          from_name: "Birthday Surprise",
           name: name,
-          message: name + " clicked YES on her birthday page at " + new Date().toLocaleString() + "."
+          message: name + " clicked YES on your birthday page at " + new Date().toLocaleString() + "."
         })
       }).catch(function () {});
     } catch (e) {}
@@ -248,4 +248,3 @@ button.ghost { background: transparent; color: var(--blush); border: 1.5px solid
 
 </body>
 </html>
-  
